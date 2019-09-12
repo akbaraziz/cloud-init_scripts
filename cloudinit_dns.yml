@@ -1,0 +1,12 @@
+#cloud-config
+
+
+manage_resolv_conf: true
+
+resolv.conf:
+  nameservers: "[@@{DNS_1}@@, @@{DNS_2}@@]"
+  searchdomains:
+   - '@@{DOMAIN_NAME}@@'
+  domain: '@@{DOMAIN_NAME}@@'
+  
+

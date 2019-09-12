@@ -1,0 +1,42 @@
+#cloud-config
+
+# Do not update existing packages 
+package_update: false
+
+# Do not upgrade existing packages
+package_upgrade: false
+
+# For required packages to function
+package_reboot_if_required: true
+
+# List of packages to be installed as part of the provisioning process
+packages:
+- firstboot
+- iotop
+- glibc
+- glibc-common
+- haproxy
+- lshw
+- logrotate
+- logwatch
+- nagios-plugins
+- nagions-plugins-nrpe
+- nagios-plugins-load
+- nagios-plugins-ntp
+- nagios-plugins-ssh
+- nagios-plugins-swap
+- nagios-plugins-nagios
+- nfs-utils
+- nrpe
+- ntp
+- ntpdate
+- nmap-ncat
+- perl
+- psmisc
+- rhn-setup
+- rhn-check
+- rhn-client-tools
+- screen
+- telnet
+- wget
+- yum-utils

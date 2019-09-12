@@ -1,0 +1,6 @@
+#cloud-config
+
+preserve_hostname: false
+fqdn: '@@{FQDN}@@'
+hostname: '@@{HOST_NAME}@@'
+manage_etc_hosts: true

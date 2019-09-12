@@ -1,0 +1,29 @@
+#cloud-config
+
+cloud_config_modules: 
+  - resolv_conf
+  - runcmd
+
+write_files:
+  - path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    content: |
+      IPADDR=@@{HOST_IP}@@
+      NETMASK=@{HOST_NETMASK}@@
+      GATEWAY=@@{HOST_GW}@@
+      BOOTPROTO=none
+      ONBOOT=yes
+      DEVICE=eth0
+
+runcmd:
+  - [ifdown, eth0]
+  - [ifup, eth0]
+  
+manage_resolv_conf: true
+resolv_conf:
+  nameservers: ['@@{DNS_1}@@', '@@{DNS_2}@@']
+  searchdomains:
+    - @@{DOMAIN_NAME}@@
+  domain: @@{DOMAIN_NAME}@@
+  options:
+    rotate: true
+    timeout: 1

@@ -1,0 +1,9 @@
+#cloud-config
+
+rh_subscription:
+    username: '@@{RHN_USER.username}@@'
+    password: '@@{RHN_USER.secret}@@'
+    activation_key: 
+    org: @@{ORG_NAME}@@
+    auto-attach: true
+    server-hostname: '@@{HOST_NAME}@@'

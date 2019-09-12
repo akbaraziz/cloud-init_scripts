@@ -1,0 +1,38 @@
+hostname: cloud_init_test 
+fqdn: cloud_init_test.nutanix.com 
+write_files: 
+- path: /etc/sysconfig/network-scripts/ifcfg-eth0 content: | DEVICE=eth0 BOOTPROTO="none" NETMASK="255.255.254.0" IPADDR="10.0.0.10" GATEWAY="10.0.0.1" ONBOOT="yes"
+
+runcmd: 
+- [ifdown, eth0]
+- [ifup, eth0]
+
+
+#cloud-config
+users:
+  - name: nutanix
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-rsa <key here>
+    lock-passwd: false
+    passwd: <password here>
+ 
+yum_repos:
+  saltstack-repo:
+    baseurl: https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest
+    enabled: true
+    gpgcheck: true
+    gpgkey: http://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest/SALTSTACK-GPG-KEY.pub
+    name: SaltStack repo for RHEL/CentOS $releasever
+ 
+packages:
+  - salt-master
+  - bash-completion
+package_upgrade: true
+hostname: salt-master
+runcmd:
+  - systemctl enable salt-master.service
+  - service salt-master start
+  
+  
+acli uhura.vm.create_with_customize CloudInit-Demo num_cores_per_vcpu=1 num_vcpus=1 memory=1G cloudinit_userdata_path=adsf:///NTNX-Container/salt-master.yaml

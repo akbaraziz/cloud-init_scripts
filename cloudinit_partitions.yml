@@ -1,0 +1,7 @@
+#cloud-config
+
+fs_setup:
+  - label: disk0
+    filesystem: 'xfs'
+    device: '/dev/sda'
+    partition: 'auto'

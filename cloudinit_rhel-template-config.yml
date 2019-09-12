@@ -1,0 +1,58 @@
+#cloud-config
+#
+# set users
+users:
+  - name: @@{linuxcred.username}@@
+    ssh_pwauth: 1
+    shell: /bin/bash
+    lock-passwd: 0
+    passwd: @@{linuxcred.secret}@@
+    sudo: ['ALL=(ALL) NOPASSWD:    ALL']
+
+# enable ssh passwd auth
+ssh_pwauth: 1
+disable_root: 0
+ssh_deletekeys: 1
+
+# set root passwd
+chpasswd:
+  list: |
+    root:@@{linroot.secret}@@
+  expire: 0
+
+# set hostname
+fqdn: @@{HOST_NAME}@@-0@@{calm_int(calm_array_index) + 1}@@.@@{DOMAIN_NAME}@@
+
+# network config
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: 0
+      addresses:
+        - @@{IP_PREFIX}@@@@{calm_int(calm_array_index) + 122}@@\22
+      gateway4: @@{GATEWAY}@@
+
+bootcmd:
+  - ifdown eth0
+  - ifup eth0
+
+# set resolv_conf settings
+manage_resolv_conf: 1
+
+resolv_conf:
+  nameservers: [@@{DNS_1}@@,@@{DNS_2}@@]
+  searchdomains: @@{DOMAIN_NAME}@@
+  domain: @@{DOMAIN_NAME}@@
+  options:
+    rotate: 1
+    timeout: 1
+
+# stop/disable/remove NetworkManager
+runcmd:
+ - systemctl stop NetworkManager
+ - systemctl disable NetworkManager
+ - yum remove NetworkManager
+
+
+# vim:syntax=yaml
