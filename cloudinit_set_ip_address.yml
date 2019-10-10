@@ -1,5 +1,6 @@
 #cloud-config
 
+# Configure Network Adapter
 network-interfaces: |
  iface eth0 inet static
  address @@{IP_ADDR}@@
