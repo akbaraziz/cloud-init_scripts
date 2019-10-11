@@ -1,0 +1,39 @@
+#cloud-config
+ssh_pwauth: True
+ssh_authorized_keys:
+  - Enter your public key here
+users:
+  - default
+  - name: username ex. jsmith
+    gecos: User Name ex. John Smith
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm,systemd-journal
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - Enter your public key here
+
+# Change root default password in image
+chpasswd:
+  list: |
+     root:@@{root.secret}@@
+  expire: False
+
+# Register with Red Hat Network 
+rh_subscription:
+  username: @@{RHN_CRED.username}@@
+  password: @@{RHN_CRED.secret}@@
+  auto-attach: True
+  disable-repo: [ '*' ]
+  enable-repo: [ 'rhel-7-server-extras-rpms', 'rhel-7-server-rh-common-rpms', 'rhel-7-server-rpms' ]
+
+# Update OS with latest patches
+runcmd:
+  - yum update -y
+  
+# Reboot System after Update
+power_state:
+  delay: "+1"
+  mode: reboot
+  message: Rebooting now...
+  timeout: 10
+  condition: True

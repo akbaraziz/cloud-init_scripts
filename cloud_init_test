@@ -1,4 +1,4 @@
-hostname: cloud_init_test 
+hostname: cloud_init_test1
 fqdn: cloud_init_test.nutanix.com 
 write_files: 
 - path: /etc/sysconfig/network-scripts/ifcfg-eth0 content: | DEVICE=eth0 BOOTPROTO="none" NETMASK="255.255.254.0" IPADDR="10.0.0.10" GATEWAY="10.0.0.1" ONBOOT="yes"
