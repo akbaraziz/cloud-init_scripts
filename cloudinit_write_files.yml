@@ -1,0 +1,22 @@
+#cloud-config
+write_files:
+  - path: /config/custom-config.sh
+    permissions: 0755
+    owner: root:root
+    content: |
+      #!/bin/bash
+
+      echo "Hello World" >> /var/tmp/cloud-init-output
+
+      # Wait for MCPD to be up before running tmsh commands
+      source /usr/lib/bigstart/bigip-ready-functions
+      wait_bigip_ready
+
+      # Begin BIG-IP configuration
+      tmsh modify sys global-settings gui-setup disabled
+      tmsh modify sys global-settings gui-security-banner-text "Configured via Cloud-Init!"
+
+      tmsh save /sys config
+runcmd:
+  # NOTE: Commands must be non-blocking so send long running commands (polling/waiting for mcpd) to the background
+  - /config/custom-config.sh &
