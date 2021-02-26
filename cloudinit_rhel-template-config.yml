@@ -1,5 +1,5 @@
 #cloud-config
-#
+
 # set users
 users:
   - name: @@{linuxcred.username}@@

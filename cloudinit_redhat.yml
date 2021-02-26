@@ -1,4 +1,5 @@
 #cloud-config
+
 ssh_pwauth: True
 ssh_authorized_keys:
   - Enter your public key here

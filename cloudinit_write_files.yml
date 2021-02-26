@@ -1,4 +1,5 @@
 #cloud-config
+
 write_files:
   - path: /config/custom-config.sh
     permissions: 0755

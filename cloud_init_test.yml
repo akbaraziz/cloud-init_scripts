@@ -1,3 +1,5 @@
+#cloud-config
+
 hostname: cloud_init_test1
 fqdn: cloud_init_test.nutanix.com 
 write_files: 
