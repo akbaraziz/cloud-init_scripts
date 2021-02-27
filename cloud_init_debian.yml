@@ -1,0 +1,18 @@
+#cloud-config
+
+
+package_upgrade: true
+apt:
+  sources:
+    docker.list:
+      source: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable"
+      keyid: 0EBFCD88
+
+packages:
+  - docker-ce
+
+power_state:
+  delay: "now"
+  mode: reboot
+  message: Reboot after installing Docker 
+  condition: True 
