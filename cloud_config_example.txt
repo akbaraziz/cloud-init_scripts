@@ -1,0 +1,37 @@
+#cloud-config
+name: centos
+    ssh-authorized-keys:
+      - @@{CENTOS.public_key}@@
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+
+hostname: @@{HOST_NAME}@@
+ssh_pwauth: True
+ssh_authorized_keys:
+  - ssh-rsa 
+users:
+  - default
+  - name: akbar
+    gecos: Akbar Aziz
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm,systemd-journal
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa 
+# Change root default password in image
+chpasswd:
+  list: |
+     root:@@{LinuxAdmin.secret}@@
+  expire: False
+
+
+# Update OS with latest patches
+runcmd:
+  - yum update -y
+  
+# Reboot System after Update
+power_state:
+  delay: "+1"
+  mode: reboot
+  message: Rebooting now...
+  timeout: 10
+  condition: True
