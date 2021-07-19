@@ -1,0 +1,57 @@
+#cloud-config
+users:
+  - name: nutanix
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - <your public SSH RSA key here>
+    lock-passwd: false
+    passwd: $6$4guEcDvX$HBHMFKXp4x/Eutj0OW5JGC6f1toudbYs.q.WkvXGbUxUTzNcHawKRRwrPehIxSXHVc70jFOp3yb8yZgjGUuET.
+
+# note: the encoded password hash above is "nutanix/4u" (without the quotes)
+
+yum_repos:
+  epel-release:
+    baseurl: http://download.fedoraproject.org/pub/epel/7/$basearch
+    enabled: true
+    failovermethod: priority
+    gpgcheck: true
+    gpgkey: http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+    name: Extra Packages for Enterprise Linux 7 - Release
+
+package_update: true
+package_upgrade: true
+
+hostname: @@{HOST_NAME}@@
+
+packages:
+  - gcc-c++
+  - make
+  - unzip
+  - bash-completion
+  - python-pip
+  - s3cmd
+  - stress
+  - awscli
+  - ntp
+  - ntpdate
+  - nodejs
+  - python36
+  - python36-setuptools
+  - jq
+  - tar
+  - wget
+  - curl
+
+runcmd:
+  - npm install -g request express
+  - systemctl stop firewalld
+  - systemctl disable firewalld
+  - /sbin/setenforce 0
+  - sed -i -e 's/enforcing/disabled/g' /etc/selinux/config
+  - /bin/python3.6 -m ensurepip
+  - pip install -U pip
+  - pip install boto3 python-magic
+  - ntpdate -u -s 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
+  - systemctl restart ntpd
+
+final_message: CentOS 7 Machine setup successfully!
